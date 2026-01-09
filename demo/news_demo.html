@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>ScriptGuard Demo - News Site</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --black: #000000;
+      --white: #ffffff;
+      --gray-1: #0a0a0a;
+      --gray-2: #111111;
+      --gray-3: #1a1a1a;
+      --gray-4: #333333;
+      --gray-5: #666666;
+      --gray-6: #999999;
+      --gray-7: #cccccc;
+      --border: #222222;
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: var(--black);
+      color: var(--white);
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+    
+    /* Header */
+    header {
+      padding: 60px 20px 40px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+    
+    .site-tag {
+      display: inline-block;
+      background: var(--white);
+      color: var(--black);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    
+    header h1 {
+      font-size: 3rem;
+      font-weight: 700;
+      margin: 0 0 15px 0;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+    }
+    
+    header p {
+      font-size: 1rem;
+      color: var(--gray-7);
+      max-width: 700px;
+      margin-bottom: 20px;
+    }
+    
+    .header-subtitle {
+      font-size: 0.85rem;
+      color: var(--gray-5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 25px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    
+    /* Main Content */
+    .content {
+      padding: 0 20px 40px;
+    }
+    
+    /* Controls */
+    .controls {
+      padding: 30px;
+      border: 1px solid var(--border);
+      background: var(--gray-1);
+      margin-bottom: 40px;
+    }
+    
+    .controls h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin: 0 0 20px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 15px;
+    }
+    
+    .controls-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+    
+    button {
+      background: var(--gray-1);
+      color: var(--white);
+      border: 1px solid var(--border);
+      padding: 14px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    button:hover {
+      background: var(--white);
+      color: var(--black);
+      border-color: var(--white);
+    }
+    
+    button:active {
+      transform: translateY(1px);
+    }
+    
+    /* Sections */
+    .section {
+      margin: 0 0 30px 0;
+      padding: 30px;
+      border: 1px solid var(--border);
+      background: var(--gray-1);
+    }
+    
+    .section h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin: 0 0 15px 0;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 15px;
+    }
+    
+    .section p {
+      color: var(--gray-6);
+      margin: 0 0 20px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    /* Logs */
+    .log-container {
+      background: var(--black);
+      border: 1px solid var(--border);
+      padding: 20px;
+      margin-top: 15px;
+    }
+    
+    .log {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      margin: 0 0 12px 0;
+      padding: 0 0 12px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--gray-7);
+      display: flex;
+      align-items: flex-start;
+      line-height: 1.5;
+    }
+    
+    .log:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+    
+    .log-timestamp {
+      color: var(--gray-5);
+      min-width: 70px;
+      margin-right: 15px;
+      font-size: 0.8rem;
+    }
+    
+    .log-message {
+      flex: 1;
+      word-break: break-word;
+    }
+    
+    .log-type {
+      display: inline-block;
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-left: 10px;
+      text-transform: uppercase;
+    }
+    
+    .type-info {
+      background: var(--white);
+      color: var(--black);
+    }
+    
+    .type-success {
+      background: var(--white);
+      color: var(--black);
+    }
+    
+    .type-warning {
+      background: var(--gray-5);
+      color: var(--white);
+    }
+    
+    .type-error {
+      background: var(--gray-5);
+      color: var(--white);
+      border: 1px solid var(--gray-7);
+    }
+    
+    /* Social Widget */
+    #socialWidget {
+      margin: 20px 0;
+    }
+    
+    #comments {
+      background: var(--black);
+      border: 1px solid var(--border);
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .comment {
+      font-size: 0.9rem;
+      padding: 15px 0;
+      border-bottom: 1px solid var(--border);
+      color: var(--gray-7);
+      line-height: 1.5;
+    }
+    
+    .comment:last-child {
+      border-bottom: none;
+    }
+    
+    .comment-time {
+      color: var(--gray-5);
+      font-size: 0.8rem;
+      margin-top: 5px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--gray-1);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--gray-5);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--gray-6);
+    }
+    
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--gray-5);
+      font-size: 0.8rem;
+      border-top: 1px solid var(--border);
+      margin-top: 40px;
+      line-height: 1.6;
+    }
+    
+    footer p {
+      margin-bottom: 10px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2.2rem;
+      }
+      
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .section {
+        padding: 20px;
+      }
+      
+      .content {
+        padding: 0 15px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="site-tag">News Monitoring</div>
+    <h1>ScriptGuard Demo - News Site</h1>
+    <p>This page demonstrates ScriptGuard's interception capabilities on a simulated news website environment.</p>
+    <div class="header-subtitle">
+      Security Monitoring Active • All Operations Simulated
+    </div>
+  </header>
+  
+  <div class="content">
+    <div class="controls">
+      <h3>Manual Controls</h3>
+      <div class="controls-grid">
+        <button onclick="testFetch()">Test Fetch</button>
+        <button onclick="testXHR()">Test XHR</button>
+        <button onclick="testStorage()">Test Storage</button>
+        <button onclick="testDOM()">Test DOM</button>
+        <button onclick="clearLogs()">Clear Logs</button>
+      </div>
+    </div>
+    
+    <div class="section">
+      <h2>Analytics Tracker</h2>
+      <p>This script sends periodic analytics pings and user behavior tracking.</p>
+      <div class="log-container" id="analyticsLogs"></div>
+    </div>
+    
+    <div class="section">
+      <h2>Cryptocurrency Miner</h2>
+      <p>This script fetches a payload and attempts to perform background CPU work.</p>
+      <div class="log-container" id="minerLogs"></div>
+    </div>
+    
+    <div class="section">
+      <h2>Social Widget</h2>
+      <p>This widget manages user comments and dynamic DOM updates.</p>
+      <div id="socialWidget">
+        <div id="comments"></div>
+      </div>
+      <button onclick="addComment()">Add Demo Comment</button>
+    </div>
+    
+    <div class="section">
+      <h2>System Logs</h2>
+      <div class="log-container" id="demoLogs"></div>
+    </div>
+  </div>
+  
+  <footer>
+    <p>ScriptGuard News Site Demo • Experimental Security Environment</p>
+    <p>All activities are simulated locally • No external network connections established</p>
+    <p style="margin-top: 20px; font-size: 0.75rem;">TIMESTAMP: <span id="currentTime"></span></p>
+  </footer>
+  
+  <script>
+    function log(sectionId, message, type = 'info') {
+      const logs = document.getElementById(sectionId);
+      const div = document.createElement("div");
+      div.className = "log";
+      
+      const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit', second:'2-digit'});
+      const typeClass = `type-${type}`;
+      
+      div.innerHTML = `
+        <div class="log-timestamp">${timestamp}</div>
+        <div class="log-message">${message}</div>
+        <div class="log-type ${typeClass}">${type.toUpperCase()}</div>
+      `;
+      
+      logs.appendChild(div);
+      logs.scrollTop = logs.scrollHeight;
+    }
+    
+    function testFetch() {
+      log("demoLogs", "Fetch request initiated to analytics endpoint", "info");
+      log("analyticsLogs", "Analytics ping sent: /fake/track", "warning");
+      
+      setTimeout(() => {
+        log("analyticsLogs", "Blocked suspicious fetch to unknown domain", "error");
+        log("demoLogs", "ScriptGuard intercepted fetch request", "warning");
+      }, 350);
+    }
+    
+    function testXHR() {
+      log("demoLogs", "XHR request to internal API endpoint", "info");
+      
+      setTimeout(() => {
+        log("demoLogs", "XHR response received (simulated)", "success");
+        log("analyticsLogs", "User behavior data collected via XHR", "warning");
+      }, 300);
+    }
+    
+    function testStorage() {
+      log("demoLogs", "LocalStorage access attempted", "warning");
+      log("analyticsLogs", "User data stored in localStorage", "warning");
+      
+      setTimeout(() => {
+        log("demoLogs", "ScriptGuard monitoring storage access patterns", "info");
+      }, 250);
+    }
+    
+    function testDOM() {
+      const div = document.createElement('div');
+      div.className = "comment";
+      const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      div.innerHTML = `DOM injected element<span class="comment-time">${timestamp}</span>`;
+      
+      log("demoLogs", "DOM injection attempt detected", "error");
+      
+      setTimeout(() => {
+        try {
+          document.getElementById('comments').appendChild(div);
+          log("demoLogs", "DOM injection prevented by ScriptGuard", "warning");
+          log("analyticsLogs", "Unauthorized DOM manipulation blocked", "error");
+        } catch (err) {
+          log("demoLogs", `DOM error: ${err.message}`, "error");
+        }
+      }, 400);
+    }
+    
+    function clearLogs() {
+      document.getElementById("demoLogs").innerHTML = "";
+      document.getElementById("analyticsLogs").innerHTML = "";
+      document.getElementById("minerLogs").innerHTML = "";
+      document.getElementById("comments").innerHTML = "";
+      
+      log("demoLogs", "All logs cleared by user", "info");
+    }
+    
+    function addComment() {
+      const comments = [
+        "Interesting article about web security.",
+        "The monitoring tools are very effective.",
+        "This demo clearly shows the risks.",
+        "Good implementation of security measures.",
+        "The black and white design is clean."
+      ];
+      
+      const comment = comments[Math.floor(Math.random() * comments.length)];
+      const container = document.getElementById('comments');
+      const c = document.createElement('div');
+      c.className = 'comment';
+      const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      c.innerHTML = `"${comment}"<div class="comment-time">${timestamp}</div>`;
+      container.appendChild(c);
+      
+      log("demoLogs", "Social widget comment added", "info");
+      log("analyticsLogs", "User interaction recorded: comment added", "warning");
+    }
+    
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('currentTime').textContent = new Date().toLocaleString();
+      setInterval(() => {
+        document.getElementById('currentTime').textContent = new Date().toLocaleString();
+      }, 1000);
+      
+      // Initial logs
+      setTimeout(() => {
+        log("demoLogs", "News site loaded successfully", "info");
+        log("demoLogs", "ScriptGuard monitoring active", "info");
+        log("analyticsLogs", "Google Analytics script loaded", "warning");
+        log("minerLogs", "Background scripts initialized", "warning");
+        log("minerLogs", "No unauthorized computation detected", "success");
+        
+        // Initial comment
+        const container = document.getElementById('comments');
+        const c = document.createElement('div');
+        c.className = 'comment';
+        const timestamp = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        c.innerHTML = `"Welcome to the ScriptGuard news demo"<div class="comment-time">${timestamp}</div>`;
+        container.appendChild(c);
+      }, 500);
+      
+      // Simulate background analytics
+      setTimeout(() => {
+        log("analyticsLogs", "Periodic analytics ping sent", "warning");
+      }, 2000);
+      
+      // Simulate occasional background activity
+      setInterval(() => {
+        if (Math.random() > 0.7) {
+          if (Math.random() > 0.5) {
+            log("minerLogs", "Suspicious background computation detected", "error");
+          } else {
+            log("analyticsLogs", "Automatic user behavior tracking", "warning");
+          }
+        }
+      }, 10000);
+    });
+  </script>
+</body>
+</html>
